@@ -1,7 +1,6 @@
 const bcrypt = require("bcrypt");
 const moment = require("moment");
 const jwt = require("jsonwebtoken");
-const randomstring = require('randomstring');
 const dotenv = require("dotenv");
 dotenv.config();
 const { authService,emailService } = require("../services");
@@ -17,24 +16,13 @@ const register = async (req, res) => {
       if (userExists) {
         throw new Error("User already created by this email!", 409);
       }
+      let payload = {
+        email: reqBody.email,
+        role: reqBody.role,
+        exp: moment().add(1, "days").unix(),
+      };
 
-      // Generate a random OTP (you can customize the length and characters)
-    // const otp = randomstring.generate({ length: 6, charset: 'numeric' });
-
-    // Send the OTP via email
-    // await emailService.sendOTPByEmail(reqBody.email, otp);
-
-    // Store the OTP securely for later verification
-    // const otpSecret = emailService.generateAndStoreSecret(reqBody.email, otp);
-
-      // let payload = {
-      //   email: reqBody.email,
-      //   role: reqBody.role,
-      //   // otpSecret: otpSecret,
-      //   exp: moment().add(1, "days").unix(),
-      // };
-
-      // const token = await jwt.sign(payload, process.env.JWT_SECRET_KEY);
+      const token = await jwt.sign(payload, process.env.JWT_SECRET_KEY);
 
       const data = await authService.createUser(reqBody);
       if (!data) {
@@ -60,31 +48,18 @@ const register = async (req, res) => {
           }
         }
       );
-      
       res.status(201).json({
         success: true,
         message: `${reqBody.role} create successfully!`,
         data: data,
-        // token: token,
+        token: token,
       });
     } catch (error) {
       res.status(400).json({ success: false, message: error.message });
     }
   };
 
-  // Verify OTP function
- async function verifyOTP(email, otp) {
-  const otpSecret = emailService.retrieveSecretByEmail(email);
-
-  // Verify the OTP
-  if (otpSecret && otp === otpSecret) {
-       return true;
-  } else {
-     return false;
-  }
-}
-
-  /**user login */
+   /**user login */
   const login = async (req, res) => {
     try {
       const { email, password } = req.body;
@@ -119,6 +94,4 @@ const register = async (req, res) => {
   module.exports = {
     register,
     login,
-    verifyOTP
-
-  };
+    };
