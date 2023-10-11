@@ -7,8 +7,12 @@ const createUser = async (reqbody) => {
 const findUserByEmail = async (email) => {
   return await User.findOne({email});
 };
+const deleteUserByEmail = async (email) => {
+  return await User.findOneAndDelete({email:email});
+};
 
 module.exports={
     createUser,
-    findUserByEmail
+    findUserByEmail,
+    deleteUserByEmail
 }

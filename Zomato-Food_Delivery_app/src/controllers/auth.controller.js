@@ -1,36 +1,13 @@
 const bcrypt = require("bcrypt");
 const moment = require("moment");
 const jwt = require("jsonwebtoken");
-const nodemailer = require('nodemailer');
 const randomstring = require('randomstring');
 const dotenv = require("dotenv");
 dotenv.config();
-const { authService } = require("../services");
+const { authService,emailService } = require("../services");
+const ejs = require("ejs");
+const path = require("path");
 
-/**email send */
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: process.env.SMTP_PORT,
-  auth: {
-    user: process.env.SMTP_USERNAME,
-    pass: process.env.SMTP_PASSWORD,
-  },
-});
-
-async function sendOTPByEmail(email, otp) {
-  try {
-    const mailOptions = {
-      from: process.env.EMAIL_FROM,
-      to: email,
-      subject: '123456',
-      text: `Your OTP code is: ${otp}`,
-    };
-
-    await transporter.sendMail(mailOptions);
-  } catch (error) {
-    throw error;
-  }
-}
 /**create register */
 const register = async (req, res) => {
     try {
@@ -42,33 +19,53 @@ const register = async (req, res) => {
       }
 
       // Generate a random OTP (you can customize the length and characters)
-    const otp = randomstring.generate({ length: 6, charset: 'numeric' });
+    // const otp = randomstring.generate({ length: 6, charset: 'numeric' });
 
     // Send the OTP via email
-    await sendOTPByEmail(reqBody.email, otp);
+    // await emailService.sendOTPByEmail(reqBody.email, otp);
 
     // Store the OTP securely for later verification
-    const otpSecret = generateAndStoreSecret(reqBody.email, otp);
+    // const otpSecret = emailService.generateAndStoreSecret(reqBody.email, otp);
 
-      let payload = {
-        email: reqBody.email,
-        role: reqBody.role,
-        otpSecret: otpSecret,
-        exp: moment().add(1, "days").unix(),
-      };
+      // let payload = {
+      //   email: reqBody.email,
+      //   role: reqBody.role,
+      //   // otpSecret: otpSecret,
+      //   exp: moment().add(1, "days").unix(),
+      // };
 
-      const token = await jwt.sign(payload, process.env.JWT_SECRET_KEY);
+      // const token = await jwt.sign(payload, process.env.JWT_SECRET_KEY);
 
       const data = await authService.createUser(reqBody);
       if (!data) {
         throw new Error("Something went wrong, please try again or later!");
       }
 
+      ejs.renderFile(
+        path.join(__dirname, "../views/otp-tem.ejs"),
+        {
+          email: reqBody.email,
+          otp: ("0".repeat(4) + Math.floor(Math.random() * 10 ** 4)).slice(-4),
+          user_name: reqBody.user_name
+        },
+        async (err, data) => {
+          if (err) {
+            let userCreated = await authService.findUserByEmail(reqBody.email);
+            if (userCreated) {
+              await authService.deleteUserByEmail(reqBody.email);
+            }
+            throw new Error("Something went wrong, please try again.");
+          } else {
+            emailService.sendMail(reqBody.email, data, "Verify Email");
+          }
+        }
+      );
+      
       res.status(201).json({
         success: true,
         message: `${reqBody.role} create successfully!`,
         data: data,
-        token: token,
+        // token: token,
       });
     } catch (error) {
       res.status(400).json({ success: false, message: error.message });
@@ -76,8 +73,8 @@ const register = async (req, res) => {
   };
 
   // Verify OTP function
-async function verifyOTP(email, otp) {
-  const otpSecret = retrieveSecretByEmail(email);
+ async function verifyOTP(email, otp) {
+  const otpSecret = emailService.retrieveSecretByEmail(email);
 
   // Verify the OTP
   if (otpSecret && otp === otpSecret) {
@@ -85,16 +82,6 @@ async function verifyOTP(email, otp) {
   } else {
      return false;
   }
-}
-
-// Function to store OTP secret (you can use a database for this)
-function generateAndStoreSecret(email, otp) {
-    return otp;
-}
-
-// Function to retrieve OTP secret (you can use a database for this)
-function retrieveSecretByEmail(email) {
-  return null; // Return null if not found
 }
 
   /**user login */
@@ -119,14 +106,9 @@ function retrieveSecretByEmail(email) {
       if (findUser && successPassword) {
         token = await jwt.sign(payload, process.env.JWT_SECRET_KEY);
       }
-
-      //   let data;
-      //   if (token) {
-      //     data = await userService.findUserAndUpdate(findUser._id, token);
-      //   }
       res.status(200).json({
         success: true,
-        message: `${findUser.role} Login successfully!`,
+        message: `${reqBody.role} Login successfully!`,
         data: token,
       });
     } catch (error) {

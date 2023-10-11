@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const rest_type_detailsSchema = new mongoose.Schema(
   {
-    rest_name:{
+    rest_details:{
         type:mongoose.Types.ObjectId,
         ref:"rest_details"
     },
@@ -10,6 +10,7 @@ const rest_type_detailsSchema = new mongoose.Schema(
       type:String,
       trim:true
     },
+    
   },
   {
     timestamps: true,

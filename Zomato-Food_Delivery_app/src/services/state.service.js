@@ -1,10 +1,8 @@
 const { State } = require("../models");
 
 const getStateByName = async (state_name) => {
-  return State.findOne().populate({
-    path: "country_name",
-    select: ["country"],
-  });
+  return State.findOne(state_name);
+    
 };
 
 const createState = async (reqbody) => {

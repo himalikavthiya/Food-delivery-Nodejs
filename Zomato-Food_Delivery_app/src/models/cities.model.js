@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const citiesSchema = new mongoose.Schema(
   {
-    state_name:{
+    state:{
         type:mongoose.Types.ObjectId,
         ref:"state"
     },

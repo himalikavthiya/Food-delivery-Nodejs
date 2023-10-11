@@ -11,7 +11,7 @@ const createCities = async(req,res) => {
         res.status(201).json({
             succcess:true,
             message:"Cities Data created successfully! ",
-            data:Cities
+            data:cities
         })
     } catch (error) {
         res.status(400).json({

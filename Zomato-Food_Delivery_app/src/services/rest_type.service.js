@@ -13,7 +13,7 @@ const getRest_typeByName = async(rest_type_name) => {
 /**get rest_type list */
 const getRest_typeList = async() => {
     return Resturant_Type.find().populate({
-        path:"rest_detail",
+        path:"rest_details",
         select:"rest_name"});
 };
 

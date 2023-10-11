@@ -5,6 +5,7 @@ const cors = require("cors");
 const { connectDB } = require("./config/dbconnection");
 const routes = require("./routes/v1");
 const app = express();
+const path = require("path");
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -17,6 +18,8 @@ app.use(bodyparser.json());
 /* ------------------------------- enable cors ------------------------------ */
 app.use(cors());
 app.options("*", cors());
+
+app.use(express.static(path.join(__dirname, `../src/public`)));
 
 /* ------------------------------ use namespace ----------------------------- */
 app.use("/v1", routes);

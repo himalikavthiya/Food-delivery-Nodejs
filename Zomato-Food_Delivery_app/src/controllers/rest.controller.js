@@ -7,21 +7,22 @@ const createRest = async(req,res) => {
         if(req.files.length < 2){
             throw new Error("Restaurant and food both images are required !")
         }
-        const reqbody = req.body;
-        reqbody.rest_image = req.files[0].filename
-        reqbody.food_image = req.files[1].filename
-        const rest_exist = await restService.getRestByName(reqbody.rest_name);
+        console.log(req.files);
+        const reqBody = req.body;
+        reqBody.rest_img = req.files[0].filename
+        reqBody.food_img = req.files[1].filename
+        const rest_exist = await restService.getRestByName(reqBody.rest_name);
         if(rest_exist){
             throw new Error("Restaurant on this name already exist !");
         }
-        const restaurant = await restService.createRest(reqbody);
-        if(!restaurant){
+        const rest = await restService.createRest(reqBody);
+        if(!rest){
             throw new Error("Something went wrong, Try again later !");
         }
         res.status(200).json({
             succcess:true,
             message:"Restaurant created successfully !",
-            data:restaurant
+            data:rest
         })
     } catch (error) {
         res.status(400).json({

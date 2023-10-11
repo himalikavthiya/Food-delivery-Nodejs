@@ -3,7 +3,7 @@ const { User } = require("../models");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const auth = () => async (req, res, next) => {
+const auth = (token, roles) => async (req, res, next) => {
   try {
     const token = req.headers.authorization;
     if (!token) {

@@ -12,7 +12,10 @@ const getCitiesByName = async(cities_name) => {
 
 /**get Cities list */
 const getCitiesList = async() => {
-    return Cities.find().populate("state");
+    return Cities.find().populate({
+        path:"state",
+        select:"state_name"
+    });
 };
 
 /**get Cities by Id */

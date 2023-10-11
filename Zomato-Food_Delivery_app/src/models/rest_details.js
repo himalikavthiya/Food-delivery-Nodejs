@@ -25,6 +25,13 @@ const rest_DetailsSchema = new mongoose.Schema(
       type:mongoose.Types.ObjectId,
       ref: "city",
     },
+    rest_img:{
+      type:String
+    },
+    food_img:{
+      type:String,
+      trim:true
+    },
     opening_hours:{
       type:Date,
       default:new Date().setHours(9,0,0)

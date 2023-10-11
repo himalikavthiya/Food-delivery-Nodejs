@@ -8,4 +8,5 @@ module.exports.rest_typeService = require("./rest_type.service");
 module.exports.orderService = require("./order.service");
 module.exports.order_itemService = require("./order_item.service");
 module.exports.ownerService = require("./owner.service");
+module.exports.emailService = require("./email.service");
 

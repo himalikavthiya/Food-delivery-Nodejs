@@ -7,7 +7,16 @@ const createOrder = async (reqbody) => {
 
 /**Get order List */
 const getOrder = async (req, res) => {
-  return order.find().populate('user').populate('product');
+  return order
+    .find()
+    .populate({
+      path: "user",
+      select: "user_name",
+    })
+    .populate({
+      path: "rest_type",
+      select: "rest_type_name",
+    });
 };
 
 /* order data by ID */

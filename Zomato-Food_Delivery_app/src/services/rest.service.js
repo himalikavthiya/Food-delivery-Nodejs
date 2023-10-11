@@ -5,8 +5,8 @@ const getRestByName = async (rest_name) => {
   return Restaurant.findOne({ rest_name });
 };
 // Create restaurant
-const createRest = async (reqbody) => {
-  return Restaurant.create(reqbody);
+const createRest = async (reqBody) => {
+  return Restaurant.create(reqBody);
 };
 // Get restaurant list
 const getRestList = async () => {

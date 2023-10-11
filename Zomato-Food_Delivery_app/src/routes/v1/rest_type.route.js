@@ -1,9 +1,12 @@
 const express = require("express");
 const { rest_typeController } = require("../../controllers");
+const { upload } = require("../../middlwares/upload");
 const router = express.Router();
 
 /**create rest_typeaurants list data */
-router.post("/create-rest_type", rest_typeController.createRest_type);
+router.post("/create-rest_type", 
+// upload.single("food_img"),
+rest_typeController.createRest_type);
 
 /** get all rest_typeaurant list*/
 router.get("/list", rest_typeController.getRest_typeList);
