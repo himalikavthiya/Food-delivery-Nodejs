@@ -1,6 +1,7 @@
 //All services file exports
 module.exports.authService = require("./auth.service");
 module.exports.userService = require("./user.service");
+module.exports.adminUserService = require("./adminUser.service");
 module.exports.stateService = require("./state.service");
 module.exports.citiesService = require("./cities.service");
 module.exports.restService = require("./rest.service");

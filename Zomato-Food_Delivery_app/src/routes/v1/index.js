@@ -1,6 +1,7 @@
 const express = require("express");
 const authRoute = require("./auth.route");
 const userRoute = require("./user.route");
+const adminUserRoute = require("./adminUser.route");
 const stateRoute = require("./state.route");
 const citiesRoute = require("./cities.route");
 const restRoute = require("./rest.route");
@@ -12,6 +13,7 @@ const router = express.Router();
 
 router.use("/auth", authRoute);
 router.use("/user", userRoute);
+router.use("/adminUser" , adminUserRoute)
 router.use("/state", stateRoute);
 router.use("/cities", citiesRoute);
 router.use("/resturant", restRoute);

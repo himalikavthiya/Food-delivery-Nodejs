@@ -1,9 +1,20 @@
 const { stateService } = require("../services");
+const {stateValidation}=require("../validation/state.validation");
 
 /**Create State Data  */
 const createState = async(req,res) => {
     try {
         const reqbody = req.body;
+         // Validate req.body against the userSchema
+    const { error } = stateValidation.validate(reqbody);
+
+    if (error) {
+      // Validation failed, send an error response
+      res.status(400).json({
+        message: error.message,
+      });
+      return;
+    }
          const state = await stateService.createState(reqbody);
         if(!state){
             throw new Error("Something went wrong, try again later ");
