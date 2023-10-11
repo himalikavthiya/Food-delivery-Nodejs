@@ -4,5 +4,8 @@ node_modules
 #ENV
 *.env
 
+#public
+public
+
 #lock-file
 package-lock.json

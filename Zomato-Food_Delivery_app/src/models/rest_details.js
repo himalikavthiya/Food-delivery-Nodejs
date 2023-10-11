@@ -17,8 +17,13 @@ const rest_DetailsSchema = new mongoose.Schema(
         type: String,
         trim: true,
     },
-    rest_rating:{
-        type:Number,
+    rest_type:{
+      type:mongoose.Types.ObjectId,
+      ref: "rest_type",
+    },
+    city:{
+      type:mongoose.Types.ObjectId,
+      ref: "city",
     },
     opening_hours:{
       type:Date,

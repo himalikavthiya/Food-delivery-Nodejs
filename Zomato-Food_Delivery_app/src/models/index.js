@@ -1,7 +1,17 @@
-/* ----------------------------- USER MANAGMENT ----------------------------- */
-module.exports.State = require("./state.model");
-module.exports.City = require("./city.model");
+/* -------------------------------------------------------------------------- */
+/*                               USER MANAGMENT                               */
+/* -------------------------------------------------------------------------- */
 module.exports.User = require("./user.model");
+
+ /* -------------------------------------------------------------------------- */
+ /*                               LOCATION MODEL                               */
+ /* -------------------------------------------------------------------------- */
+module.exports.State = require("./state.model");
+module.exports.Cities = require("./cities.model");
+
+/* -------------------------------------------------------------------------- */
+/*                               RESTURANT MODEL                              */
+/* -------------------------------------------------------------------------- */
 module.exports.Owners = require("./owner_details");
 module.exports.Resturant = require("./rest_details");
 module.exports.Resturant_Type = require("./rest_type_details.model");

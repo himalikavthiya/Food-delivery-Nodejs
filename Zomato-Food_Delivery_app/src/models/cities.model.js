@@ -1,20 +1,21 @@
 const mongoose = require("mongoose");
 
-const citySchema = new mongoose.Schema(
+const citiesSchema = new mongoose.Schema(
   {
-    state:{
+    state_name:{
         type:mongoose.Types.ObjectId,
         ref:"state"
     },
-    city_name: {
+    cities_name: {
       type:String,
       trim:true
     },
   },
   {
     timestamps: true,
+    versionKey:false,
   }
 );
 
-const City = mongoose.model("City", citySchema);
-module.exports = City;
+const Cities = mongoose.model("Cities", citiesSchema);
+module.exports = Cities;

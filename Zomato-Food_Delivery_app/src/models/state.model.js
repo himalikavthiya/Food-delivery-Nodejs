@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const stateSchema = new mongoose.Schema(
   {
-    user_country:{
+    country_name:{
         type:mongoose.Types.ObjectId,
         ref:"user"
     },

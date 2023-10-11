@@ -13,10 +13,6 @@ const owners_DetailsSchema = new mongoose.Schema(
     owner_phone_no: {
       type: Number,
     },
-    rest_name:{
-      type:mongoose.Types.ObjectId,
-      ref:"rest_details"
-    },
     is_active: {
       type: Boolean,
       default:true

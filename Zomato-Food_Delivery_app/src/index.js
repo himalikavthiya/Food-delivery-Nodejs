@@ -1,29 +1,35 @@
-const express = require("express");
 const http = require("http");
+const express = require("express");
 const bodyparser = require("body-parser");
-const routes = require("./routes/v1");
 const cors = require("cors");
-const { connectDB } = require("./db/dbconnection");
+const { connectDB } = require("./config/dbconnection");
+const routes = require("./routes/v1");
 const app = express();
 const dotenv = require("dotenv");
 dotenv.config();
 
-/* ------------------------ allow form data from body ----------------------- */
+  /* ------- allow form-data from body form-data is use for image upload ------ */
 app.use(bodyparser.urlencoded({ extended: false }));
 
 /* ------------------------ allow json data from body ----------------------- */
 app.use(bodyparser.json());
 
-/* -------------------- frantend error handle useing cors ------------------- */
+/* ------------------------------- enable cors ------------------------------ */
 app.use(cors());
+app.options("*", cors());
 
 /* ------------------------------ use namespace ----------------------------- */
 app.use("/v1", routes);
 
-/* --------------------------- database connection -------------------------- */
+ /* ---- route not created and you try to use that route then throw error. --- */
+app.use((req, res, next) => {
+  next(new Error("Route not found!"));
+})
+
+/* --------------------------- Database connection -------------------------- */
 connectDB();
 
 const server = http.createServer(app);
 server.listen(process.env.PORT, () => {
-  console.log("server lising", process.env.PORT);
+  console.log(" Server listning port number " + process.env.PORT);
 });

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema(
   {
@@ -6,11 +7,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    password: {
+    email: {
       type: String,
       trim: true,
     },
-    email: {
+    password: {
       type: String,
       trim: true,
     },
@@ -24,21 +25,29 @@ const userSchema = new mongoose.Schema(
     country:{
       type:String,
       trim:true,
-      default:"india"
     },
     role:{
       type:String,
-      enum:["user","admin","superadmin"]
+      enum:["user","admin","superadmin"],
+      default: "user",
+    },
+    token:{
+      type:String
     },
     is_active: {
       type: Boolean,
-      default:true
+      default:false
     },
   },
   {
     timestamps: true,
+    versionKey:false,
   }
 );
+userSchema.pre("save", async function (next) {
+  var salt = bcrypt.genSaltSync(10);
+  this.password = await bcrypt.hash(this.password, salt);
+});
 
 const User = mongoose.model("user", userSchema);
 module.exports = User;

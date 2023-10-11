@@ -1,34 +1,46 @@
 const { User } = require("../models");
 
-/**create user details */
+/**create user */
 const createUser = async (reqbody) => {
-  return User.create(reqbody);
+  return await User.create(reqbody);
 };
 
-/**Get user List */
-const getUser = async (req, res) => {
+/**user find by email */
+const findUserByEmail = async (email) => {
+  return await User.findOne({ email });
+};
+
+/** get all user by role */
+const getAllUser = async (role) => {
+  return await User.find(role);
+};
+
+/* Get user list */
+const getUserList = async () => {
   return User.find();
 };
 
-/* user data by id */
-const getUserId = async (userId) => {
+/** Get user details by id */
+const getUserById = async (userId) => {
   return User.findById(userId);
 };
 
-/**Delete user Id */
+/**user delete by id */
 const deleteUser = async (userId) => {
   return User.findByIdAndDelete(userId);
 };
 
-/**update user detail*/
-const updateUser = async (userId) => {
-  return User.findByIdAndUpdate(userId);
+/** user data update by id */
+const updateUser = async (userId, updateBody) => {
+  return User.findByIdAndUpdate(userId, { $set: updateBody });
 };
 
 module.exports = {
   createUser,
-  getUser,
-  getUserId,
+  findUserByEmail,
+  getAllUser,
+  getUserList,
+  getUserById,
   deleteUser,
   updateUser,
 };
